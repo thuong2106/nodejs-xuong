@@ -1,13 +1,6 @@
-import axios from "axios";
 import { errorMessages, successMessages } from "../constants/message.js";
-import Product from "../models/Product.model.js";
 import Category from "../models/Category.js";
-const instance = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import Product from "../models/Product.model.js";
 
 const productControllers = {
   getProducts: async (req, res, next) => {
@@ -33,7 +26,7 @@ const productControllers = {
           $push: { products: data._id },
         },
         {
-          new: true, // nếu cập nhật được hãy trả về giá trị mới sau khi cập nhật
+          new: true,
         }
       );
       if (!data || !updateCategory) {
@@ -49,7 +42,7 @@ const productControllers = {
   },
   getProductById: async (req, res, next) => {
     try {
-      const data = await Product.findById(req.params.id).populate('category');
+      const data = await Product.findById(req.params.id).populate("category");
       if (!data) {
         return res.status(400).json({ message: "Lấy sản phẩm thất bại!" });
       }
@@ -67,7 +60,7 @@ const productControllers = {
         `${req.params.id}`,
         req.body,
         {
-          new: true, // nếu cập nhật được hãy trả về giá trị mới sau khi cập nhật
+          new: true,
         }
       );
       const updateCategory = await Category.findByIdAndUpdate(
@@ -76,7 +69,7 @@ const productControllers = {
           $push: { products: data._id },
         },
         {
-          new: true, // nếu cập nhật được hãy trả về giá trị mới sau khi cập nhật
+          new: true,
         }
       );
       if (!data || !updateCategory) {
@@ -90,7 +83,6 @@ const productControllers = {
       next(error);
     }
   },
-  // Xóa cứng
   removeProductById: async (req, res, next) => {
     try {
       const data = await Product.findByIdAndDelete(req.params.id);
@@ -108,7 +100,6 @@ const productControllers = {
       next(error);
     }
   },
-  // Xóa mềm
   softRemoveProductById: async (req, res, next) => {
     try {
       const data = await Product.findByIdAndUpdate(
@@ -117,9 +108,8 @@ const productControllers = {
           hide: true,
         },
         {
-          new: true, // nếu cập nhật được hãy trả về giá trị mới sau khi cập nhật
+          new: true,
         }
-        // findByIdAndUpdate: tìm sự khác nhau để cập nhật !== findByIdAndRemove: xóa cái cũ --> vứt đi --> lấy cái mới đặt vào cái cũ
       );
       if (!data) {
         return res.status(400).json({ message: "Cập nhật sản phẩm thất bại!" });

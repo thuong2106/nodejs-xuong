@@ -1,12 +1,5 @@
-import axios from "axios";
 import { errorMessages, successMessages } from "../constants/message.js";
 import Category from "../models/Category.js";
-const instance = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 const categoryControllers = {
   getCategories: async (req, res, next) => {
@@ -57,7 +50,7 @@ const categoryControllers = {
         `${req.params.id}`,
         req.body,
         {
-          new: true, // nếu cập nhật được hãy trả về giá trị mới sau khi cập nhật
+          new: true,
         }
       );
       if (!data) {
@@ -71,14 +64,12 @@ const categoryControllers = {
       next(error);
     }
   },
-  // Xóa cứng
   removeCategoryById: async (req, res, next) => {
     try {
       if (req.params.id === "6610b6eed27f96febe9697e6") {
         return res.status(400).json({ message: "Không thể xóa danh mục này!" });
       }
 
-      // ! cap nhat lại san pham cho danh muc bị xoá
       const productsToUpdate = await Product.find({ category: req.params.id });
       await Promise.all(
         productsToUpdate.map(async (product) => {
@@ -101,7 +92,6 @@ const categoryControllers = {
       next(error);
     }
   },
-  // Xóa mềm
   softRemoveCategoryById: async (req, res, next) => {
     try {
       const data = await Category.findByIdAndUpdate(

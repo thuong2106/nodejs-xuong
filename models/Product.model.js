@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       default: "6610b6eed27f96febe9697e6",
-    }
+    },
   },
   {
     timestamps: true, //thời gian model cập nhật sản phẩm
